@@ -13,7 +13,7 @@ class User {
         else if ($phone) $where = "phone='".$phone."'";
         else return [];
         // info
-        $q = DB::query("SELECT user_id, first_name, last_name, middle_name, email, gender_id, count_notifications FROM users WHERE ".$where." LIMIT 1;") or die (DB::error());
+        $q = DB::query("SELECT user_id, first_name, last_name, middle_name, email, gender_id, count_notifications, phone FROM users WHERE ".$where." LIMIT 1;") or die (DB::error());
         if ($row = DB::fetch_row($q)) {
             return [
                 'id' => (int) $row['user_id'],
@@ -56,12 +56,67 @@ class User {
 
     // TEST
 
+	//return info
+
     public static function owner_info() {
-        // your code here ...
+        if(!empty(Session::$user_id)){
+			return self::user_info(['user_id' => Session::$user_id]);
+		}else{
+			return error_response(2001, 'Get owner user info: invalid owner user.');
+		}
     }
+	
+	//update
 
     public static function owner_update($data = []) {
-        // your code here ...
+		//parse data
+		$cnt_all = 0;
+		$set = [];
+		$ar_only_fields = array(
+			'first_name' => array(
+				'is_empty' => false,
+			),
+			'last_name' => array(
+				'is_empty' => false,
+			),
+			'middle_name' => array(
+				'is_empty' => true,
+			),
+			'email' => array(
+				'is_empty' => true,
+			),
+			'phone' => array(
+				'is_empty' => false,
+			));
+		foreach($ar_only_fields as $k=>$v){
+			if(isset($data[$k])){
+				$cnt_all++;
+				if($k === 'email') $data[$k] = mb_strtolower($data[$k]); // && filter_var($data[$k], FILTER_VALIDATE_EMAIL)  --- if needed
+				if($k === 'phone'){
+					$data[$k] = preg_replace('/[^0-9]/', '', $data[$k]);
+					if(!preg_match('/7\d{10}?/', $data[$k]))
+						continue;
+				}
+				if(!$v['is_empty'] && (string)$data[$k] === ''){
+					continue;
+				}else{
+					$set[] = '`'.$k.'`="'.$data[$k].'"';
+				}
+			}
+		};
+		//error if no fileds
+		if($cnt_all === 0){
+			return error_response(2002, 'Update owner user: no fields.');
+		}
+		//update if check
+		if(!empty($user_id = Session::$user_id) && !empty($set)){
+			$set = implode(',', $set);
+			DB::query("UPDATE `users` SET ".$set." WHERE user_id='".$user_id."' LIMIT 1;") or die (DB::error());
+			DB::query("INSERT INTO `user_notifications` (`user_id`, `title`, `viewed`, `created`) VALUES ('".$user_id."', 'update', 0, '".time()."');") or die (DB::error());
+			return 'Success update user_id: '.$user_id;
+		}else{
+			return error_response(2001, 'Update owner user: invalid owner user.');
+		}
     }
 
 }

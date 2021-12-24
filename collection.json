@@ -149,6 +149,164 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "user.get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{host}}/user.get",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user.get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user.update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"{{phone}}\",\r\n    \"email\": \"{{email}}\"\r\n,\r\n    \"first_name\": \"{{first_name}}\"\r\n,\r\n    \"last_name\": \"{{last_name}}\"\r\n,\r\n    \"middle_name\": \"{{middle_name}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/user.update",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user.update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications.get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"not_viewed_only\": \"{{not_viewed_only}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/notifications.get",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notifications.get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications.read",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "v",
+								"value": "{{v}}",
+								"type": "text"
+							},
+							{
+								"key": "project",
+								"value": "{{project}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{host}}/notifications.read",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notifications.read"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
